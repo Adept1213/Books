@@ -23,7 +23,7 @@ const ModalWindowDelete = ({
   header: string;
 }) => {
   const dispatch = useDispatch();
-  const store = useSelector((store: RootState) => store as IBook[]);
+  const store = useSelector((store: RootState) => store);
   const selectBook: IBook = store.find((book) => book.isOpen) as IBook;
 
   function yesButtonHandler() {

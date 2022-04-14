@@ -9,6 +9,11 @@ export interface IBook {
   isOpen: boolean;
 }
 
+export interface IStoreBook {
+  books: IBook[];
+  selectBook: IBook;
+}
+
 export interface IBookShow {
   id: number;
   name: string;

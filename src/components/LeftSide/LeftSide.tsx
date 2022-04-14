@@ -22,53 +22,43 @@ const {
   resetForFunction,
 } = SortStatus;
 
+function sort(a: string, b: string): number {
+  if (a < b) return -1;
+  if (a > b) return 1;
+  return 0;
+}
+
 function sortForNameIncrease(books: IBook[]) {
   const copy = [...books];
-  const result = copy.sort(function (a, b) {
-    let nameA = a.name.toLowerCase(),
-      nameB = b.name.toLowerCase();
-    if (nameA < nameB) return -1;
-    if (nameA > nameB) return 1;
-    return 0;
-  });
+  const result = copy.sort((a, b) =>
+    sort(a.name.toLowerCase(), b.name.toLowerCase())
+  );
   return result;
 }
 function sortForNameDecrease(books: IBook[]) {
   const copy = [...books];
-  const result = copy.sort(function (a, b) {
-    let nameA = a.name.toLowerCase(),
-      nameB = b.name.toLowerCase();
-    if (nameA > nameB) return -1;
-    if (nameA < nameB) return 1;
-    return 0;
-  });
+  const result = copy.sort((a, b) =>
+    sort(b.name.toLowerCase(), a.name.toLowerCase())
+  );
   return result;
 }
 function sortForAuthorIncrease(books: IBook[]) {
   const copy = [...books];
-  const result = copy.sort(function (a, b) {
-    let nameA = a.author.toLowerCase(),
-      nameB = b.author.toLowerCase();
-    if (nameA < nameB) return -1;
-    if (nameA > nameB) return 1;
-    return 0;
-  });
+  const result = copy.sort((a, b) =>
+    sort(a.author.toLowerCase(), b.author.toLowerCase())
+  );
   return result;
 }
 function sortForAuthorDecrease(books: IBook[]) {
   const copy = [...books];
-  const result = copy.sort(function (a, b) {
-    let nameA = a.author.toLowerCase(),
-      nameB = b.author.toLowerCase();
-    if (nameA > nameB) return -1;
-    if (nameA < nameB) return 1;
-    return 0;
-  });
+  const result = copy.sort((a, b) =>
+    sort(b.author.toLowerCase(), a.author.toLowerCase())
+  );
   return result;
 }
 
 const LeftSide = () => {
-  let store = useSelector((store: RootState) => store);
+  const store = useSelector((store: RootState) => store);
   const [sortState, setSortState] = useState<SortStatus>(resetForFunction);
   function sortStore() {
     switch (sortState) {

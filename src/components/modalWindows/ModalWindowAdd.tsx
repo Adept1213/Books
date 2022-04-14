@@ -18,6 +18,7 @@ import {
   WhiteRectangle,
   WrapperInputs,
 } from "./ModalWindow.element";
+import { isValid } from "./helpers";
 
 const { save, cancel } = buttonConstants;
 const { author, numberPage, bookName, yearWrite } = bookConstants;
@@ -31,7 +32,7 @@ const ModalWindowAdd = ({
   header: string;
 }) => {
   const dispatch = useDispatch();
-  const store = useSelector((store: RootState) => store as IBook[]);
+  const store = useSelector((store: RootState) => store);
   const lastElementId: number = store[store.length - 1].id;
   const [authorValue, setAuthorValue] = useState("");
   const [bookNameValue, setBookNameValue] = useState("");
@@ -52,23 +53,13 @@ const ModalWindowAdd = ({
     dispatch(actionAddNewBook(newBook));
     closeModal();
   }
-
-  function checkValid() {
-    let isValid = false;
-    const author: number = authorValue.split(" ").length;
-    if (author !== 2 && author !== 3) {
-      setIsErrorAuthor(true);
-      isValid = true;
-    } else {
-      setIsErrorAuthor(false);
+  function handlerButtonSave() {
+    if (
+      isValid(authorValue, bookNameValue, setIsErrorAuthor, setIsErrorNameBook)
+    ) {
+      return;
     }
-    if (bookNameValue.length === 0) {
-      setIsErrorNameBook(true);
-      isValid = true;
-    } else {
-      setIsErrorNameBook(false);
-    }
-    !isValid && setNewBook();
+    setNewBook();
   }
 
   return ReactDOM.createPortal(
@@ -104,7 +95,7 @@ const ModalWindowAdd = ({
           />
         </WrapperInputs>
         <ButtonsWrapper>
-          <Buttons text={save} onClick={checkValid} />
+          <Buttons text={save} onClick={handlerButtonSave} />
           <Buttons text={cancel} onClick={closeModal} />
         </ButtonsWrapper>
       </WhiteRectangle>

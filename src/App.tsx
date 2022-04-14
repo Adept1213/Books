@@ -1,5 +1,5 @@
 import { MainWrapper } from "./App.element";
-import LeftSide from "./components/Left/LeftSide";
+import LeftSide from "./components/LeftSide/LeftSide";
 import RightSide from "./components/Right/RightSide";
 
 function App() {
