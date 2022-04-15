@@ -9,9 +9,9 @@ import {
   WrapperLeftSide,
 } from "./LeftSide.element";
 import { sortConstants } from "../../constants/constants";
-import { Buttons } from "../Buttons/Buttons";
+import Buttons from "../Buttons/Buttons";
 import { IBook, SortStatus } from "../../types/types";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 
 const { header, forAuthor, forName, reset } = sortConstants;
 const {
@@ -58,7 +58,7 @@ function sortForAuthorDecrease(books: IBook[]) {
 }
 
 const LeftSide = () => {
-  const store = useSelector((store: RootState) => store);
+  const store = useSelector((store: RootState) => store.books);
   const [sortState, setSortState] = useState<SortStatus>(resetForFunction);
   function sortStore() {
     switch (sortState) {
@@ -74,20 +74,27 @@ const LeftSide = () => {
         return store;
     }
   }
-  function sortForNameHandler() {
-    if (sortState === increaseForName) {
-      setSortState(decreaseForName);
-    } else {
-      setSortState(increaseForName);
-    }
-  }
-  function sortForAuthorHandler() {
-    if (sortState === increaseForAuthor) {
-      setSortState(decreaseForAuthor);
-    } else {
-      setSortState(increaseForAuthor);
-    }
-  }
+  const sortForNameHandler = useCallback(
+    function () {
+      if (sortState === increaseForName) {
+        setSortState(decreaseForName);
+      } else {
+        setSortState(increaseForName);
+      }
+    },
+    [sortState]
+  );
+  const sortForAuthorHandler = useCallback(
+    function () {
+      if (sortState === increaseForAuthor) {
+        setSortState(decreaseForAuthor);
+      } else {
+        setSortState(increaseForAuthor);
+      }
+    },
+    [sortState]
+  );
+  const resetSort = useCallback(() => setSortState(resetForFunction), []);
 
   return (
     <WrapperLeftSide>
@@ -96,10 +103,7 @@ const LeftSide = () => {
         <ButtonsWrapper>
           <Buttons text={forAuthor} onClick={sortForAuthorHandler} />
           <Buttons text={forName} onClick={sortForNameHandler} />
-          <Buttons
-            text={reset}
-            onClick={() => setSortState(resetForFunction)}
-          />
+          <Buttons text={reset} onClick={resetSort} />
         </ButtonsWrapper>
       </SortWrapper>
       <BooksWrapper>

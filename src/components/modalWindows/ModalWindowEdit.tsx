@@ -9,7 +9,7 @@ import {
 } from "../../constants/constants";
 import { actionEditBook } from "../../redux/actions";
 import { RootState } from "../../redux/store";
-import { Buttons } from "../Buttons/Buttons";
+import Buttons from "../Buttons/Buttons";
 import Input from "../Input/Input";
 import {
   ButtonsWrapper,
@@ -32,8 +32,9 @@ const ModalWindowEdit = ({
   header: string;
 }) => {
   const dispatch = useDispatch();
-  const store = useSelector((store: RootState) => store);
-  const selectBook: IBook = store.find((book) => book.isOpen) as IBook;
+  const selectBook = useSelector(
+    (store: RootState) => store.selectedBook as IBook
+  );
   const [authorValue, setAuthorValue] = useState(selectBook.author);
   const [bookNameValue, setBookNameValue] = useState(selectBook.name);
   const [numberPageValue, setNumberPageValue] = useState(

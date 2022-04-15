@@ -1,3 +1,4 @@
+import React from "react";
 import { BoldSpan, Span, WrapperInfoAboutBook } from "./RightSide.element";
 
 const InfoAboutBook = ({ name, info }: { name: string; info: string }) => {
@@ -9,4 +10,4 @@ const InfoAboutBook = ({ name, info }: { name: string; info: string }) => {
   );
 };
 
-export default InfoAboutBook;
+export default React.memo(InfoAboutBook);

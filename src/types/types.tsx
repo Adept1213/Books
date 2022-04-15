@@ -9,9 +9,9 @@ export interface IBook {
   isOpen: boolean;
 }
 
-export interface IStoreBook {
+export interface IStoreBooks {
   books: IBook[];
-  selectBook: IBook;
+  selectedBook: IBook | undefined;
 }
 
 export interface IBookShow {

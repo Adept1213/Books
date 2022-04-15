@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { useSelector } from "react-redux";
 import {
   bookConstants,
@@ -6,7 +6,7 @@ import {
   deleteText,
 } from "../../constants/constants";
 import { RootState } from "../../redux/store";
-import { Buttons } from "../Buttons/Buttons";
+import Buttons from "../Buttons/Buttons";
 import ModalWindowAdd from "../modalWindows/ModalWindowAdd";
 import ModalWindowDelete from "../modalWindows/ModalWindowDelete";
 import ModalWindowEdit from "../modalWindows/ModalWindowEdit";
@@ -17,11 +17,17 @@ const { author, bookName, yearWrite, numberPage } = bookConstants;
 const { add, edit, deleteBook } = buttonConstants;
 
 const RightSide = () => {
-  const store = useSelector((store: RootState) => store);
-  const selectBook = store.find((book) => book.isOpen);
+  const selectBook = useSelector((store: RootState) => store.selectedBook);
   const [isOpenAddModal, setIsOpenAddModal] = useState(false);
   const [isOpenEditModal, setIsOpenEditModal] = useState(false);
   const [isOpenDeleteModal, setIsOpenDeleteModal] = useState(false);
+
+  const handlerOpenAddModal = useCallback(() => setIsOpenAddModal(true), []);
+  const handlerOpenEditModal = useCallback(() => setIsOpenEditModal(true), []);
+  const handlerOpenDeleteModal = useCallback(
+    () => setIsOpenDeleteModal(true),
+    []
+  );
 
   return (
     <RightWrapper>
@@ -36,14 +42,11 @@ const RightSide = () => {
         info={selectBook ? String(selectBook.numberPage) : ""}
       />
       <ButtonWrapper>
-        <Buttons text={add} onClick={() => setIsOpenAddModal(true)} />
+        <Buttons text={add} onClick={handlerOpenAddModal} />
         {selectBook && (
           <>
-            <Buttons text={edit} onClick={() => setIsOpenEditModal(true)} />
-            <Buttons
-              text={deleteBook}
-              onClick={() => setIsOpenDeleteModal(true)}
-            />
+            <Buttons text={edit} onClick={handlerOpenEditModal} />
+            <Buttons text={deleteBook} onClick={handlerOpenDeleteModal} />
           </>
         )}
       </ButtonWrapper>

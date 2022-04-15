@@ -1,3 +1,4 @@
+import React from "react";
 import { IInput } from "../../types/types";
 import { InputError, InputStyled, InputWrapper } from "./Input.element";
 
@@ -12,7 +13,6 @@ const Input = ({
   function inputHandlerOnlyNumber(value: string) {
     (Number(value) || value.length === 0) && setValue(value);
   }
-
   return (
     <InputWrapper>
       {onlyNNumber ? (
@@ -33,4 +33,4 @@ const Input = ({
   );
 };
 
-export default Input;
+export default React.memo(Input);

@@ -4,7 +4,7 @@ import { IBook } from "../../types/types";
 import { buttonConstants } from "../../constants/constants";
 import { actionDeleteBook } from "../../redux/actions";
 import { RootState } from "../../redux/store";
-import { Buttons } from "../Buttons/Buttons";
+import Buttons from "../Buttons/Buttons";
 import {
   ButtonsWrapper,
   HeaderModal,
@@ -23,8 +23,9 @@ const ModalWindowDelete = ({
   header: string;
 }) => {
   const dispatch = useDispatch();
-  const store = useSelector((store: RootState) => store);
-  const selectBook: IBook = store.find((book) => book.isOpen) as IBook;
+  const selectBook = useSelector(
+    (store: RootState) => store.selectedBook as IBook
+  );
 
   function yesButtonHandler() {
     closeModal();

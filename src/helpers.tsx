@@ -1,4 +1,4 @@
-import { IBook } from "./types/types";
+import { IBook, IStoreBooks } from "./types/types";
 
 export function getNameInitials(fullName: string): string {
   const arrName = fullName.split(" ");
@@ -11,8 +11,16 @@ export function getNameInitials(fullName: string): string {
   return [name, arrName[1]].join(".");
 }
 
-export function changeIsOpen(id: number, store: IBook[]): IBook[] {
-  const copy: IBook[] = store.map((book) =>
+const getSelectedBook = (copyBooks: IBook[], id: number): IBook | undefined => {
+  return copyBooks.find((book) => book.id === id);
+};
+
+const findSelectedBook = (copyBooks: IBook[]) => {
+  return copyBooks.find((book) => book.isOpen === true);
+};
+
+export function changeIsOpen(id: number, store: IStoreBooks): IStoreBooks {
+  const copyBooks: IBook[] = store.books.map((book) =>
     book.id === id
       ? {
           ...book,
@@ -20,24 +28,37 @@ export function changeIsOpen(id: number, store: IBook[]): IBook[] {
         }
       : { ...book, isOpen: false }
   );
-  return copy;
+  const copySelectedBook = getSelectedBook(copyBooks, id);
+  return {
+    books: copyBooks,
+    selectedBook:
+      copySelectedBook?.isOpen === true ? copySelectedBook : undefined,
+  };
 }
 
-export function editBook(changeBook: IBook, store: IBook[]): IBook[] {
+export function editBook(changeBook: IBook, store: IStoreBooks): IStoreBooks {
   const id = changeBook.id;
-  const copy: IBook[] = store.map((book) =>
+  const copyBooks: IBook[] = store.books.map((book) =>
     book.id === id
       ? {
           ...changeBook,
         }
       : { ...book }
   );
-  return copy;
+
+  return {
+    books: copyBooks,
+    selectedBook: findSelectedBook(copyBooks),
+  };
 }
 
-export function deleteBook(id: number, store: IBook[]): IBook[] {
-  const copy = [...store];
-  const indexDeleteBook = copy.findIndex((book) => book.id === id);
-  copy.splice(indexDeleteBook, 1);
+export function deleteBook(id: number, store: IStoreBooks): IStoreBooks {
+  const copy: IStoreBooks = {
+    books: [...store.books],
+    selectedBook: undefined,
+  };
+  const { books } = copy;
+  const indexDeleteBook = books.findIndex((book) => book.id === id);
+  books.splice(indexDeleteBook, 1);
   return copy;
 }
