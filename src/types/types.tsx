@@ -1,4 +1,4 @@
-import { Dispatch } from "react";
+import { ChangeEvent } from "react";
 
 export interface IBook {
   id: number;
@@ -27,7 +27,7 @@ export interface IInput {
   isError?: boolean;
   errorText?: string;
   value: string | number;
-  setValue: Dispatch<React.SetStateAction<string>>;
+  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
 }
 
 export enum SortStatus {

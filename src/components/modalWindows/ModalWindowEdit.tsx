@@ -19,9 +19,15 @@ import {
   WrapperInputs,
 } from "./ModalWindow.element";
 import { isValid } from "./helpers";
+import useValue from "./costumHook";
 
 const { save, cancel } = buttonConstants;
-const { author, numberPage, bookName, yearWrite } = bookConstants;
+const {
+  author: authorConst,
+  numberPage: numberPageConst,
+  bookName: bookNameConst,
+  yearWrite: yearWriteConst,
+} = bookConstants;
 const { authorError, nameError } = errorConstants;
 
 const ModalWindowEdit = ({
@@ -32,27 +38,23 @@ const ModalWindowEdit = ({
   header: string;
 }) => {
   const dispatch = useDispatch();
-  const selectBook = useSelector(
+  const { author, id, name, numberPage, yearWriting } = useSelector(
     (store: RootState) => store.selectedBook as IBook
   );
-  const [authorValue, setAuthorValue] = useState(selectBook.author);
-  const [bookNameValue, setBookNameValue] = useState(selectBook.name);
-  const [numberPageValue, setNumberPageValue] = useState(
-    String(selectBook?.numberPage)
-  );
-  const [yearWriteValue, setYearWriteValue] = useState(
-    String(selectBook?.yearWriting)
-  );
+  const authorValue = useValue(author);
+  const bookNameValue = useValue(name);
+  const numberPageValue = useValue(String(numberPage));
+  const yearWriteValue = useValue(String(yearWriting));
   const [isErrorAuthor, setIsErrorAuthor] = useState(false);
   const [isErrorNameBook, setIsErrorNameBook] = useState(false);
 
   function setNewBook() {
     const newBook: IBook = {
-      id: selectBook.id,
-      author: authorValue,
-      name: bookNameValue,
-      numberPage: Number(numberPageValue),
-      yearWriting: Number(yearWriteValue),
+      id: id,
+      author: authorValue.value,
+      name: bookNameValue.value,
+      numberPage: Number(numberPageValue.value),
+      yearWriting: Number(yearWriteValue.value),
       isOpen: true,
     };
     dispatch(actionEditBook(newBook));
@@ -60,7 +62,12 @@ const ModalWindowEdit = ({
   }
   function handlerButtonSave() {
     if (
-      isValid(authorValue, bookNameValue, setIsErrorAuthor, setIsErrorNameBook)
+      isValid(
+        authorValue.value,
+        bookNameValue.value,
+        setIsErrorAuthor,
+        setIsErrorNameBook
+      )
     ) {
       return;
     }
@@ -73,31 +80,23 @@ const ModalWindowEdit = ({
         <HeaderModal>{header}</HeaderModal>
         <WrapperInputs>
           <Input
-            placeholder={author}
+            placeholder={authorConst}
             isError={isErrorAuthor}
             errorText={authorError}
-            value={authorValue}
-            setValue={setAuthorValue}
+            {...authorValue}
           />
           <Input
-            placeholder={bookName}
+            placeholder={bookNameConst}
             isError={isErrorNameBook}
             errorText={nameError}
-            value={bookNameValue}
-            setValue={setBookNameValue}
+            {...bookNameValue}
           />
           <Input
             onlyNNumber
-            placeholder={numberPage}
-            value={numberPageValue}
-            setValue={setNumberPageValue}
+            placeholder={numberPageConst}
+            {...numberPageValue}
           />
-          <Input
-            onlyNNumber
-            placeholder={yearWrite}
-            value={yearWriteValue}
-            setValue={setYearWriteValue}
-          />
+          <Input onlyNNumber placeholder={yearWriteConst} {...yearWriteValue} />
         </WrapperInputs>
         <ButtonsWrapper>
           <Buttons text={save} onClick={handlerButtonSave} />

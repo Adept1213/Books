@@ -19,6 +19,7 @@ import {
   WrapperInputs,
 } from "./ModalWindow.element";
 import { isValid } from "./helpers";
+import useValue from "./costumHook";
 
 const { save, cancel } = buttonConstants;
 const { author, numberPage, bookName, yearWrite } = bookConstants;
@@ -34,18 +35,22 @@ const ModalWindowAdd = ({
   const dispatch = useDispatch();
   const store = useSelector((store: RootState) => store.books);
   const lastElementId: number = store[store.length - 1].id;
-  const [authorValue, setAuthorValue] = useState("");
-  const [bookNameValue, setBookNameValue] = useState("");
-  const [numberPageValue, setNumberPageValue] = useState("");
-  const [yearWriteValue, setYearWriteValue] = useState("");
+  // const [authorValue, setAuthorValue] = useState("");
+  const authorValue = useValue("");
+  // const [bookNameValue, setBookNameValue] = useState("");
+  const bookNameValue = useValue("");
+  // const [numberPageValue, setNumberPageValue] = useState("");
+  const numberPageValue = useValue("");
+  // const [yearWriteValue, setYearWriteValue] = useState("");
+  const yearWriteValue = useValue("");
   const [isErrorAuthor, setIsErrorAuthor] = useState(false);
   const [isErrorNameBook, setIsErrorNameBook] = useState(false);
 
   function setNewBook() {
     const newBook: IBook = {
       id: lastElementId + 1,
-      author: authorValue,
-      name: bookNameValue,
+      author: authorValue.value,
+      name: bookNameValue.value,
       numberPage: Number(numberPageValue),
       yearWriting: Number(yearWriteValue),
       isOpen: false,
@@ -55,7 +60,12 @@ const ModalWindowAdd = ({
   }
   function handlerButtonSave() {
     if (
-      isValid(authorValue, bookNameValue, setIsErrorAuthor, setIsErrorNameBook)
+      isValid(
+        authorValue.value,
+        bookNameValue.value,
+        setIsErrorAuthor,
+        setIsErrorNameBook
+      )
     ) {
       return;
     }
@@ -71,28 +81,16 @@ const ModalWindowAdd = ({
             placeholder={author}
             isError={isErrorAuthor}
             errorText={authorError}
-            value={authorValue}
-            setValue={setAuthorValue}
+            {...authorValue}
           />
           <Input
             placeholder={bookName}
             isError={isErrorNameBook}
             errorText={nameError}
-            value={bookNameValue}
-            setValue={setBookNameValue}
+            {...bookNameValue}
           />
-          <Input
-            onlyNNumber
-            placeholder={numberPage}
-            value={numberPageValue}
-            setValue={setNumberPageValue}
-          />
-          <Input
-            onlyNNumber
-            placeholder={yearWrite}
-            value={yearWriteValue}
-            setValue={setYearWriteValue}
-          />
+          <Input onlyNNumber placeholder={numberPage} {...numberPageValue} />
+          <Input onlyNNumber placeholder={yearWrite} {...yearWriteValue} />
         </WrapperInputs>
         <ButtonsWrapper>
           <Buttons text={save} onClick={handlerButtonSave} />
